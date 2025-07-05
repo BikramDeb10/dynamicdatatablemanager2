@@ -277,6 +277,7 @@ const tableSlice = createSlice({
       // editingRow.data[key] = value;
 
       if (typeof key === "string") {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (editingRow.data as any)[key] = value;
       }
 
