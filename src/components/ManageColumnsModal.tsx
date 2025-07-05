@@ -39,6 +39,9 @@ const ManageColumnsModal: React.FC<Props> = ({ open, onClose }) => {
     (state: RootState) => state.visibleColumns.visibleColumns
   );
   const [newColumn, setNewColumn] = useState("");
+  const allColumns = Array.from(
+    new Set([...defaultColumns, ...visibleColumns])
+  );
 
   const handleToggle = (col: string) => {
     dispatch(toggleColumn(col));
@@ -63,7 +66,7 @@ const ManageColumnsModal: React.FC<Props> = ({ open, onClose }) => {
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Manage Columns</DialogTitle>
       <DialogContent>
-        {defaultColumns.map((col) => (
+        {allColumns.map((col) => (
           <FormControlLabel
             key={col}
             control={

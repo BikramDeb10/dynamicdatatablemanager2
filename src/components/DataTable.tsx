@@ -30,6 +30,7 @@ import {
   createTheme,
   ThemeProvider,
   CssBaseline,
+  CircularProgress,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -47,6 +48,7 @@ import DeleteConfirmModal from "./DeleteConfirmModal";
 
 const DataTable: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [darkMode, setDarkMode] = useState(() => {
     if (typeof window !== "undefined") {
       return localStorage.getItem("theme") === "dark";
@@ -401,14 +403,26 @@ const DataTable: React.FC = () => {
                   background: "linear-gradient(to right, #ff4b2b, #ff416c)",
                 },
               }}
-              onClick={() => {
+              onClick={async () => {
+                setSaving(true); // Start loader
+                await new Promise((resolve) => setTimeout(resolve, 1000)); // simulate save delay (1 sec)
                 dispatch(saveAllEdits());
-                toast.success("Edits saved");
+                setSaving(false); // End loader
+                toast.success("✅ Edits saved!");
               }}
-              disabled={editingRows.length === 0 || validationErrors.length > 0}
+              disabled={
+                editingRows.length === 0 ||
+                validationErrors.length > 0 ||
+                saving
+              }
             >
-              Save All
+              {saving ? (
+                <CircularProgress size={20} sx={{ color: "#fff", mr: 1 }} />
+              ) : (
+                "💾 Save All"
+              )}
             </Button>
+
             <Button
               variant="outlined"
               color="secondary"
